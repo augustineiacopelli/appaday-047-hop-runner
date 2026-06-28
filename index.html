@@ -48,7 +48,7 @@ canvas{display:block;position:absolute;left:50%;top:50%;transform:translate(-50%
     <div id="ov-title">HOP RUNNER</div>
     <div id="ov-sub">D-pad: move &mdash; JUMP: hop (double-jump!)<br>THROW bottles at enemies! Collect power-ups!<br>100 hops = 1UP &bull; Stomp the Brewmaster!</div>
     <div id="ov-score"></div>
-    <button id="ov-btn">TAP TO BREW</button>
+    <button id="ov-btn" type="button">TAP TO BREW</button>
   </div>
   <div id="controls">
     <div id="dpad">
@@ -955,11 +955,7 @@ function drawTransition() {
   }
 }
 
-var overlay = document.getElementById('overlay');
-var ovTitle = document.getElementById('ov-title');
-var ovSub   = document.getElementById('ov-sub');
-var ovScore = document.getElementById('ov-score');
-var ovBtn   = document.getElementById('ov-btn');
+var overlay, ovTitle, ovSub, ovScore, ovBtn;
 
 function showStart() {
   overlay.classList.remove('hidden');
@@ -988,7 +984,17 @@ function showVictory() {
 function startGame() { gs = initGs(); gs.running = true; buildZone(gs.world, gs.zone); overlay.classList.add('hidden'); }
 function endGame() { gs.running = false; gs.gameOver = true; if (gs.score > gs.best) gs.best = gs.score; setTimeout(showGameOver, 600); }
 
-ovBtn.addEventListener('click', startGame);
+window.addEventListener('load', function() {
+  overlay = document.getElementById('overlay');
+  ovTitle  = document.getElementById('ov-title');
+  ovSub    = document.getElementById('ov-sub');
+  ovScore  = document.getElementById('ov-score');
+  ovBtn    = document.getElementById('ov-btn');
+  ovBtn.addEventListener('click', startGame);
+  buildZone(0, 0);
+  showStart();
+  loop();
+});
 
 document.addEventListener('keydown', function(e) {
   if (e.code==='ArrowLeft'  ||e.key==='a'||e.key==='A') keys.left=true;
@@ -1021,9 +1027,6 @@ bindBtn('btn-jump', 'jump');
 bindBtn('btn-throw','throwBtn');
 
 function loop() { update(); draw(); requestAnimationFrame(loop); }
-buildZone(0, 0);
-showStart();
-loop();
 
 })();
 </script>
